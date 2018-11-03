@@ -1,6 +1,8 @@
 .container {
-  background-color: blue;
   align-items: center;
+  display: flex;
+  margin-top: 20%;
+  justify-content: center;
 }
 .stopButton {
   position: relative;
@@ -13,11 +15,10 @@
   margin: 5%;
 }
 .app {
-  background-color: blue;
   text-align: center;
 }
 .header-class {
-  color: aliceblue;
+  color: #800000;
   text-align: center;
 }
 .text-field {
