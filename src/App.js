@@ -1,8 +1,19 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import fetch from "cross-fetch";
+import logo from "./logo.svg";
+import "./App.css";
 
 class App extends Component {
+  componentDidMount() {
+    fetch("https://avatar.lyrebird.ai/api/v0/generated", {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer oauth_1CObEa9iKp4lcqwAjrFMxMO98i0"
+      }
+    })
+      .then(res => res.json())
+      .then(res => console.log(res));
+  }
   render() {
     return (
       <div className="App">
