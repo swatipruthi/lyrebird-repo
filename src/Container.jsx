@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import fetch from "cross-fetch";
 import "./App.css";
+import RecordIcon from "./icons8-microphone-26.png";
+import StopIcon from "./circled-pause.png";
 
 class Container extends Component {
   constructor(props) {
@@ -92,10 +94,10 @@ class Container extends Component {
             className="startButton"
             onClick={this.startRecording}
           >
-            Start
+            <img src={RecordIcon} alt="" />
           </button>
           <button id="stop" className="stopButton" onClick={this.stopRecording}>
-            Stop
+            <img src={StopIcon} alt="" />
           </button>
         </div>
       </div>
