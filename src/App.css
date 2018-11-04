@@ -1,24 +1,26 @@
-.container {
-  align-items: center;
+.button-container {
   display: flex;
-  margin-top: 20%;
+  padding: 10px;
   justify-content: center;
 }
 .app {
   text-align: center;
 }
 .header-class {
-  color: #800000;
+  color: #000000;
   text-align: center;
+  font-size: 70px;
 }
-.text-field {
+.text-area {
+  width: 100%;
+}
+.container {
   margin-top: 10px;
   padding: 10px;
 }
 .wrapper {
   display: flex;
-  flex: 2;
-  align-content: space-around;
+  flex: 1;
   justify-content: space-between;
   font-family: "Times New Roman";
 }
@@ -45,9 +47,16 @@
   height: 30px;
   width: 30px;
 }
+.search-field {
+  width: 80%;
+  padding: 10px;
+}
 .generate-button {
   margin-bottom: 10px;
   position: relative;
+  border: none;
+  padding: 10px 20px;
+  background: rgb(80, 156, 235);
 }
 .audio-controls {
   display: none;

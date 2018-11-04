@@ -24,7 +24,7 @@ export default class GeneratedAudios extends PureComponent {
   render() {
     return (
       <dl>
-        {this.props.filteredText.map((result, index) => {
+        {this.props.filteredArray.map((result, index) => {
           return (
             <div key={result.created_at}>
               <div className="wrapper">

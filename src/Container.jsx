@@ -4,6 +4,7 @@ import fetch from "cross-fetch";
 import "./App.css";
 import SearchComponent from "./SearchComponent/SearchComponent";
 import GeneratedAudios from "./GeneratedAudios/GeneratedAudios";
+import TextArea from "./TextArea";
 
 export default class Container extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class Container extends Component {
       text: "",
       results: [],
       audios: [],
-      filteredText: [],
+      filteredArray: [],
       searchText: ""
     };
   }
@@ -41,7 +42,7 @@ export default class Container extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        this.setState({ results: res.results, filteredText: res.results });
+        this.setState({ results: res.results, filteredArray: res.results });
       });
   };
 
@@ -74,25 +75,28 @@ export default class Container extends Component {
         );
       });
     }
-    this.setState({ filteredText: filteredResult });
+    this.setState({ filteredArray: filteredResult });
   };
 
   render() {
     return (
-      <div className="text-field">
-        <SearchComponent
+      <div className="container">
+        <TextArea
+          value={this.state.text}
           onChange={this.onChange}
-          search={false}
-          utterance={this.state.text}
+          placeholder="Enter utterance..."
         />
-        <div className="container">
+        <div className="button-container">
           <button onClick={this.generateApi} className="generate-button">
             Generate
           </button>
         </div>
-        <SearchComponent onSearch={this.onSearch} search={true} />
+        <SearchComponent
+          onSearch={this.onSearch}
+          placeholder="Search for audios here..."
+        />
         {this.state.results.length > 0 && (
-          <GeneratedAudios filteredText={this.state.filteredText} />
+          <GeneratedAudios filteredArray={this.state.filteredArray} />
         )}
       </div>
     );
