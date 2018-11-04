@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CloseIcon from "../close-icon.png";
+import CloseIcon from "../images/close-icon.png";
 
 export default class SearchComponent extends Component {
   state = {

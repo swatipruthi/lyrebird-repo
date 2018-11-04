@@ -1,15 +1,16 @@
-## installation
+## Installation
 
-step 1: npm i
-step 2: add API_KEY and REDIRECT_URI to env.js
-step 3: npm start
-Now the app will be serving at localhost:3000
+- npm i
+- add API_KEY and REDIRECT_URI to env.js
+- npm start
+
+  Now the app will be serving at localhost:3000
 
 ## About the app
 
-- for an existing user with voices, can generate audios from given utterance
-- search from generated audios
-- play generated audio
-- download a generated audio
+- For an existing user with voices, can generate audios from given utterance
+- Search from generated audios
+- Play generated audio
+- Download a generated audio
 
 ## Demo App available at https://floating-citadel-23164.herokuapp.com/

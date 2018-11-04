@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 
-import DownloadIcon from "../download-1915753_960_720.png";
-import PlayButton from "../play-button.jpg";
+import DownloadIcon from "../images/download-1915753_960_720.png";
+import PlayButton from "../images/play-button.jpg";
 
 export default class GeneratedAudios extends PureComponent {
   // convert the URL to Blob so that it is directly downloadable on same window
