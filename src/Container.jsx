@@ -12,7 +12,9 @@ class Container extends Component {
       streamData: [],
       text: "",
       results: [],
-      audios: []
+      audios: [],
+      filteredText: [],
+      searchText: ""
     };
   }
   componentDidMount() {
@@ -30,7 +32,7 @@ class Container extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
-        this.setState({ results: res.results });
+        this.setState({ results: res.results, filteredText: res.results });
       });
   };
   generateApi = () => {
@@ -52,11 +54,19 @@ class Container extends Component {
   showAudio = index => {
     this.refs[index].play();
   };
-
+  downloadAudio = async url => {
+    const response = await fetch(url);
+    const wav = await response.blob();
+    const blobURL = URL.createObjectURL(wav);
+    const link = document.createElement("a"); // Or maybe get it from the current document
+    link.href = blobURL;
+    link.download = `${+new Date()}.wav`;
+    link.click();
+  };
   renderGeneratedAudios = () => {
     return (
       <dl>
-        {this.state.results.map((result, index) => {
+        {this.state.filteredText.map((result, index) => {
           return (
             <div key={result.created_at}>
               <div className="wrapper">
@@ -74,11 +84,12 @@ class Container extends Component {
                 </button>
                 <div className="generated-text">{result.text}</div>
                 <span className="download-link">
-                  <a href={result.url} download={"audio.wav"}>
-                    <button className="download-button">
-                      <img src={DownloadIcon} className="download" alt="" />
-                    </button>
-                  </a>
+                  <button
+                    className="download-button"
+                    onClick={e => this.downloadAudio(result.url)}
+                  >
+                    <img src={DownloadIcon} className="download" alt="" />
+                  </button>
                 </span>
               </div>
               <br />
@@ -88,9 +99,21 @@ class Container extends Component {
       </dl>
     );
   };
-  onChange = e => {
-    //controlled input text field
-    this.setState({ text: e.target.value });
+  handleInputChange = e => {
+    this.setState({ searchText: e.target.value });
+  };
+
+  onSearch = e => {
+    let filteredResult = this.state.results;
+    if (e.target.value) {
+      filteredResult = this.state.results.filter(element => {
+        return (
+          element.text.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+          -1
+        );
+      });
+    }
+    this.setState({ filteredText: filteredResult });
   };
 
   render() {
@@ -108,6 +131,11 @@ class Container extends Component {
             Generate
           </button>
         </div>
+        <input
+          type="text"
+          placeholder="Search for audios here..."
+          onChange={this.onSearch}
+        />
         {this.state.results.length > 0 && this.renderGeneratedAudios()}
       </div>
     );

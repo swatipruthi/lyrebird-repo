@@ -34,6 +34,7 @@
   border: none;
   background: none;
   cursor: pointer;
+  outline: none;
 }
 .download-button .click {
   border: none;
