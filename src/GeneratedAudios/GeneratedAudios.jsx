@@ -23,38 +23,42 @@ export default class GeneratedAudios extends PureComponent {
 
   render() {
     return (
-      <dl>
-        {this.props.filteredArray.map((result, index) => {
-          return (
-            <div key={result.created_at}>
-              <div className="wrapper">
-                <audio
-                  controls
-                  className="audio-controls"
-                  src={result.url}
-                  ref={`audio_${index}`}
-                />
-                <button
-                  onClick={e => this.showAudio(`audio_${index}`)}
-                  className="download-button"
-                >
-                  <img src={PlayButton} className="download" alt="" />
-                </button>
-                <div className="generated-text">{result.text}</div>
-                <span className="download-link">
-                  <button
-                    className="download-button"
-                    onClick={e => this.downloadAudio(result.url)}
-                  >
-                    <img src={DownloadIcon} className="download" alt="" />
-                  </button>
-                </span>
-              </div>
-              <br />
-            </div>
-          );
-        })}
-      </dl>
+      <div key={this.props.result.created_at}>
+        <div className={this.props.wrapperClass || "wrapper"}>
+          <audio
+            controls
+            className={this.props.controlClass || "audio-controls"}
+            src={this.props.result.url}
+            ref={`audio_${this.props.index}`}
+          />
+          <button
+            onClick={e => this.showAudio(`audio_${this.props.index}`)}
+            className={this.props.buttonClass || "download-button"}
+          >
+            <img
+              src={PlayButton}
+              className={this.props.downloadClass || "download"}
+              alt=""
+            />
+          </button>
+          <div className={this.props.textClass || "generated-text"}>
+            {this.props.result.text}
+          </div>
+          <span className={this.props.downloadLink || "download-link"}>
+            <button
+              className={this.props.buttonClass || "download-button"}
+              onClick={e => this.downloadAudio(this.props.result.url)}
+            >
+              <img
+                src={DownloadIcon}
+                className={this.props.downloadClass || "download"}
+                alt=""
+              />
+            </button>
+          </span>
+        </div>
+        <br />
+      </div>
     );
   }
 }

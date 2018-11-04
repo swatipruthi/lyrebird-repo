@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import fetch from "cross-fetch";
 
 import "./App.css";
-import SearchComponent from "./SearchComponent/SearchComponent";
-import GeneratedAudios from "./GeneratedAudios/GeneratedAudios";
+import SearchComponent from "./SearchComponent";
+import Recordings from "./Recordings";
 import TextArea from "./TextArea";
 
 export default class Container extends Component {
@@ -36,7 +36,7 @@ export default class Container extends Component {
     fetch("https://avatar.lyrebird.ai/api/v0/generated", {
       headers: {
         Accept: "application/json",
-        Authorization: "Bearer oauth_1CVyubRIlAjvBzlCWGxP1WpPRCV"
+        Authorization: `Bearer ${this.props.access_token}`
       },
       method: "GET"
     })
@@ -51,7 +51,7 @@ export default class Container extends Component {
     fetch("https://avatar.lyrebird.ai/api/v0/generate", {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer oauth_1CVyubRIlAjvBzlCWGxP1WpPRCV"
+        Authorization: `Bearer ${this.props.access_token}`
       },
       method: "POST",
       body: JSON.stringify({ text: this.state.text })
@@ -59,6 +59,7 @@ export default class Container extends Component {
       .then(res => res)
       .then(res => {
         this.generatedAPI();
+        this.setState({ text: "" });
       });
   };
 
@@ -95,8 +96,8 @@ export default class Container extends Component {
           onSearch={this.onSearch}
           placeholder="Search for audios here..."
         />
-        {this.state.results.length > 0 && (
-          <GeneratedAudios filteredArray={this.state.filteredArray} />
+        {this.state.results.length && (
+          <Recordings filteredArray={this.state.filteredArray} />
         )}
       </div>
     );
