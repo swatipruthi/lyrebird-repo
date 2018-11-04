@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import fetch from "cross-fetch";
-import "./App.css";
-import DownloadIcon from "./download-1915753_960_720.png";
-import PlayButton from "./play-button.jpg";
 
-class Container extends Component {
+import "./App.css";
+import SearchComponent from "./SearchComponent/SearchComponent";
+import GeneratedAudios from "./GeneratedAudios/GeneratedAudios";
+
+export default class Container extends Component {
   constructor(props) {
     super(props);
+    //initialise state variables to avoid undefined values on render
     this.state = {
       globalContext: {},
       streamData: [],
@@ -17,10 +19,18 @@ class Container extends Component {
       searchText: ""
     };
   }
+
+  // fetch generated audios from API on initial render
   componentDidMount() {
-    //GET api call to fetch the list of recorded audios
     this.generatedAPI();
   }
+
+  // generate utterances input change handler
+  onChange = e => {
+    this.setState({ text: e.target.value });
+  };
+
+  // fetch generated utterances API
   generatedAPI = () => {
     fetch("https://avatar.lyrebird.ai/api/v0/generated", {
       headers: {
@@ -31,12 +41,12 @@ class Container extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res);
         this.setState({ results: res.results, filteredText: res.results });
       });
   };
+
+  // fetch generate utterances API
   generateApi = () => {
-    //invoke POST generate api
     fetch("https://avatar.lyrebird.ai/api/v0/generate", {
       headers: {
         "Content-Type": "application/json",
@@ -47,69 +57,20 @@ class Container extends Component {
     })
       .then(res => res)
       .then(res => {
-        console.log(res);
         this.generatedAPI();
       });
   };
-  showAudio = index => {
-    this.refs[index].play();
-  };
-  downloadAudio = async url => {
-    const response = await fetch(url);
-    const wav = await response.blob();
-    const blobURL = URL.createObjectURL(wav);
-    const link = document.createElement("a"); // Or maybe get it from the current document
-    link.href = blobURL;
-    link.download = `${+new Date()}.wav`;
-    link.click();
-  };
-  renderGeneratedAudios = () => {
-    return (
-      <dl>
-        {this.state.filteredText.map((result, index) => {
-          return (
-            <div key={result.created_at}>
-              <div className="wrapper">
-                <audio
-                  controls
-                  className="audio-controls"
-                  src={result.url}
-                  ref={`audio_${index}`}
-                />
-                <button
-                  onClick={e => this.showAudio(`audio_${index}`)}
-                  className="download-button"
-                >
-                  <img src={PlayButton} className="download" alt="" />
-                </button>
-                <div className="generated-text">{result.text}</div>
-                <span className="download-link">
-                  <button
-                    className="download-button"
-                    onClick={e => this.downloadAudio(result.url)}
-                  >
-                    <img src={DownloadIcon} className="download" alt="" />
-                  </button>
-                </span>
-              </div>
-              <br />
-            </div>
-          );
-        })}
-      </dl>
-    );
-  };
-  handleInputChange = e => {
-    this.setState({ searchText: e.target.value });
-  };
 
+  // search utterances from the list of generated audios
   onSearch = e => {
     let filteredResult = this.state.results;
     if (e.target.value) {
       filteredResult = this.state.results.filter(element => {
         return (
-          element.text.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
-          -1
+          element.text
+            .trim()
+            .toLowerCase()
+            .indexOf(e.target.value.trim().toLowerCase()) !== -1
         );
       });
     }
@@ -119,27 +80,21 @@ class Container extends Component {
   render() {
     return (
       <div className="text-field">
-        <input
-          type="text"
-          value={this.state.text}
+        <SearchComponent
           onChange={this.onChange}
-          placeholder="What's up?"
-          ref="test"
+          search={false}
+          utterance={this.state.text}
         />
         <div className="container">
           <button onClick={this.generateApi} className="generate-button">
             Generate
           </button>
         </div>
-        <input
-          type="text"
-          placeholder="Search for audios here..."
-          onChange={this.onSearch}
-        />
-        {this.state.results.length > 0 && this.renderGeneratedAudios()}
+        <SearchComponent onSearch={this.onSearch} search={true} />
+        {this.state.results.length > 0 && (
+          <GeneratedAudios filteredText={this.state.filteredText} />
+        )}
       </div>
     );
   }
 }
-
-export default Container;
