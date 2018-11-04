@@ -34,9 +34,11 @@
   border: none;
   background: none;
   cursor: pointer;
-  .click {
-    border: none;
-  }
+}
+.download-button .click {
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 .download {
   height: 30px;
@@ -45,4 +47,7 @@
 .generate-button {
   margin-bottom: 10px;
   position: relative;
+}
+.audio-controls {
+  display: none;
 }

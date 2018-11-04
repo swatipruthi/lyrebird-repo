@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import fetch from "cross-fetch";
 import "./App.css";
 import DownloadIcon from "./download-1915753_960_720.png";
+import PlayButton from "./play-button.jpg";
 
 class Container extends Component {
   constructor(props) {
@@ -10,11 +11,15 @@ class Container extends Component {
       globalContext: {},
       streamData: [],
       text: "",
-      results: []
+      results: [],
+      audios: []
     };
   }
   componentDidMount() {
     //GET api call to fetch the list of recorded audios
+    this.generatedAPI();
+  }
+  generatedAPI = () => {
     fetch("https://avatar.lyrebird.ai/api/v0/generated", {
       headers: {
         Accept: "application/json",
@@ -27,21 +32,49 @@ class Container extends Component {
         console.log(res);
         this.setState({ results: res.results });
       });
-  }
+  };
+  generateApi = () => {
+    //invoke POST generate api
+    fetch("https://avatar.lyrebird.ai/api/v0/generate", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer oauth_1CVyubRIlAjvBzlCWGxP1WpPRCV"
+      },
+      method: "POST",
+      body: JSON.stringify({ text: this.state.text })
+    })
+      .then(res => res)
+      .then(res => {
+        console.log(res);
+        this.generatedAPI();
+      });
+  };
+  showAudio = index => {
+    this.refs[index].play();
+  };
 
   renderGeneratedAudios = () => {
     return (
       <dl>
-        {this.state.results.map(result => {
+        {this.state.results.map((result, index) => {
           return (
             <div key={result.created_at}>
               <div className="wrapper">
-                <audio controls>
-                  <source src={result.url} />
-                </audio>
+                <audio
+                  controls
+                  className="audio-controls"
+                  src={result.url}
+                  ref={`audio_${index}`}
+                />
+                <button
+                  onClick={e => this.showAudio(`audio_${index}`)}
+                  className="download-button"
+                >
+                  <img src={PlayButton} className="download" alt="" />
+                </button>
                 <div className="generated-text">{result.text}</div>
                 <span className="download-link">
-                  <a href={"#"} download={"audio.wav"}>
+                  <a href={result.url} download={"audio.wav"}>
                     <button className="download-button">
                       <img src={DownloadIcon} className="download" alt="" />
                     </button>
@@ -60,20 +93,6 @@ class Container extends Component {
     this.setState({ text: e.target.value });
   };
 
-  generateApi = blob => {
-    //invoke POST generate api
-    fetch("https://avatar.lyrebird.ai/api/v0/generate", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer oauth_1CVyubRIlAjvBzlCWGxP1WpPRCV"
-      },
-      method: "POST",
-      body: JSON.stringify({ text: this.state.text })
-    })
-      .then(res => res.json())
-      .then(res => console.log(res));
-  };
-
   render() {
     return (
       <div className="text-field">
@@ -82,6 +101,7 @@ class Container extends Component {
           value={this.state.text}
           onChange={this.onChange}
           placeholder="What's up?"
+          ref="test"
         />
         <div className="container">
           <button onClick={this.generateApi} className="generate-button">
