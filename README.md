@@ -11,3 +11,5 @@ Now the app will be serving at localhost:3000
 - search from generated audios
 - play generated audio
 - download a generated audio
+
+## Demo App available at https://floating-citadel-23164.herokuapp.com/

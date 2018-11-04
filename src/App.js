@@ -15,13 +15,7 @@ class App extends Component {
     isAuthorized: this.getAccessToken().length > 0
   };
 
-  onMount = () => {
-    this.setState({ isAuthorized: true });
-  };
-
   render() {
-    console.log("env", process.env);
-
     const url =
       "https://myvoice.lyrebird.ai/authorize?response_type=token&client_id=" +
       API_KEY +
@@ -39,10 +33,7 @@ class App extends Component {
         ) : (
           <div className="app">
             <header className="header-class">Lyrebird App</header>
-            <Container
-              onMount={this.onMount}
-              access_token={this.getAccessToken()}
-            />
+            <Container access_token={this.getAccessToken()} />
           </div>
         )}
       </div>
