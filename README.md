@@ -1,7 +1,7 @@
 ## Installation
 
 - npm i
-- Add API_KEY and REDIRECT_URI to .env
+- Add API_KEY and REDIRECT_URI to .env file
 - npm start
 
   Now the app will be serving at localhost:3000
