@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Container from "./Container";
-import { API_KEY, REDIRECT_URI } from "./env";
+import { API_KEY, REDIRECT_URI } from "../env";
 
 class App extends Component {
   getAccessToken = () => {
