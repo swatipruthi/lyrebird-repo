@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
 import Container from "./Container";
-import { API_KEY, REDIRECT_URI } from "../env";
+
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI || "";
+const API_KEY = process.env.REACT_APP_API_KEY || "";
 
 class App extends Component {
   getAccessToken = () => {
@@ -18,6 +20,8 @@ class App extends Component {
   };
 
   render() {
+    console.log("env", process.env);
+
     const url =
       "https://myvoice.lyrebird.ai/authorize?response_type=token&client_id=" +
       API_KEY +
