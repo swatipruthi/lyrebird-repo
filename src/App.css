@@ -4,16 +4,6 @@
   margin-top: 20%;
   justify-content: center;
 }
-.stopButton {
-  position: relative;
-  align-items: center;
-  margin: 5%;
-}
-.startButton {
-  position: relative;
-  align-items: center;
-  margin: 5%;
-}
 .app {
   text-align: center;
 }
@@ -24,4 +14,35 @@
 .text-field {
   margin-top: 10px;
   padding: 10px;
+}
+.wrapper {
+  display: flex;
+  flex: 2;
+  align-content: space-around;
+  justify-content: space-between;
+  font-family: "Times New Roman";
+}
+.generated-text {
+  position: relative;
+  margin: 10px;
+}
+.download-link {
+  position: relative;
+  margin-left: 5px;
+}
+.download-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  .click {
+    border: none;
+  }
+}
+.download {
+  height: 30px;
+  width: 30px;
+}
+.generate-button {
+  margin-bottom: 10px;
+  position: relative;
 }

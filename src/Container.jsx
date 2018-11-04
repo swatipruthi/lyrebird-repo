@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import fetch from "cross-fetch";
 import "./App.css";
-import RecordIcon from "./icons8-microphone-26.png";
-import StopIcon from "./circled-pause.png";
+import DownloadIcon from "./download-1915753_960_720.png";
 
 class Container extends Component {
   constructor(props) {
@@ -10,7 +9,8 @@ class Container extends Component {
     this.state = {
       globalContext: {},
       streamData: [],
-      text: ""
+      text: "",
+      results: []
     };
   }
   componentDidMount() {
@@ -18,51 +18,46 @@ class Container extends Component {
     fetch("https://avatar.lyrebird.ai/api/v0/generated", {
       headers: {
         Accept: "application/json",
-        Authorization: "Bearer oauth_1CObEa9iKp4lcqwAjrFMxMO98i0"
-      }
+        Authorization: "Bearer oauth_1CVyubRIlAjvBzlCWGxP1WpPRCV"
+      },
+      method: "GET"
     })
       .then(res => res.json())
-      .then(res => console.log(res));
+      .then(res => {
+        console.log(res);
+        this.setState({ results: res.results });
+      });
   }
+
+  renderGeneratedAudios = () => {
+    return (
+      <dl>
+        {this.state.results.map(result => {
+          return (
+            <div key={result.created_at}>
+              <div className="wrapper">
+                <audio controls>
+                  <source src={result.url} />
+                </audio>
+                <div className="generated-text">{result.text}</div>
+                <span className="download-link">
+                  <a href={"#"} download={"audio.wav"}>
+                    <button className="download-button">
+                      <img src={DownloadIcon} className="download" alt="" />
+                    </button>
+                  </a>
+                </span>
+              </div>
+              <br />
+            </div>
+          );
+        })}
+      </dl>
+    );
+  };
   onChange = e => {
     //controlled input text field
     this.setState({ text: e.target.value });
-  };
-  startRecording = () => {
-    let audio = document.getElementById("start");
-    //get default media microphone
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(stream => {
-        console.log(stream);
-        //set MediaStream object
-        audio.src = stream;
-        //javascript MediaStream API
-        var context = new AudioContext();
-        let streamData = [];
-        var source = context.createMediaStreamSource(audio.src);
-        // process the audio and create chunks each of 1024 bytes
-        var processor = context.createScriptProcessor(1024, 1, 1);
-        source.connect(processor);
-        processor.connect(context.destination);
-        processor.onaudioprocess = function(e) {
-          //push stream data to an array
-          console.log(e.inputBuffer);
-          streamData.push(e.inputBuffer);
-        };
-        //set the context to stop the stream buffering
-        this.setState({ globalContext: context, streamData });
-      })
-      .catch(error => console.log(error));
-  };
-
-  stopRecording = () => {
-    //close audio context connection
-    this.state.globalContext.close();
-    console.log("stopped recording", this.state.streamData);
-    let blob = new Blob(this.state.streamData, { type: "audio/mp3" });
-    console.log("blob", blob);
-    this.generateApi(blob);
   };
 
   generateApi = blob => {
@@ -70,7 +65,7 @@ class Container extends Component {
     fetch("https://avatar.lyrebird.ai/api/v0/generate", {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer oauth_1CObEa9iKp4lcqwAjrFMxMO98i0"
+        Authorization: "Bearer oauth_1CVyubRIlAjvBzlCWGxP1WpPRCV"
       },
       method: "POST",
       body: JSON.stringify({ text: this.state.text })
@@ -89,17 +84,11 @@ class Container extends Component {
           placeholder="What's up?"
         />
         <div className="container">
-          <button
-            id="start"
-            className="startButton"
-            onClick={this.startRecording}
-          >
-            <img src={RecordIcon} alt="" />
-          </button>
-          <button id="stop" className="stopButton" onClick={this.stopRecording}>
-            <img src={StopIcon} alt="" />
+          <button onClick={this.generateApi} className="generate-button">
+            Generate
           </button>
         </div>
+        {this.state.results.length > 0 && this.renderGeneratedAudios()}
       </div>
     );
   }
